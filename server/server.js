@@ -1,6 +1,7 @@
 const { Pool, Client } = require('pg');
 const express = require('express');
 const app = express();
+let customer = require('../models/customer');
 
 const pool = new Pool({
   user: 'izjuxkkxxdkalz',
@@ -14,6 +15,7 @@ const pool = new Pool({
 })
 
 const bodyParser = require("body-parser");
+const { query } = require('express');
 app.use(bodyParser.json());
 
 app.get('/product', (req, res) => {
@@ -24,6 +26,25 @@ app.get('/product', (req, res) => {
     });
 });
 
+app.get('/status', (req, res) => {
+    pool.query('select * from status', (err, result) =>{
+        console.log(err, res);
+        res.send(result.rows);
+        pool.end;
+    });
+});
+
+app.get('/customer', (req, res) => {
+     pool.query('select * from customer', (err, result) => {
+            console.log(err, res);
+            res.send(result.rows);
+            pool.end
+        });
+});
+
+app.get('/auth', (req, res)=>{
+   const sql = pool.query('select * from users where mail = ' + mail)
+});
 
 app.listen(5432, () => {
     console.log("Sever is now listening at port");
